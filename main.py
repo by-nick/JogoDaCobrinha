@@ -28,9 +28,17 @@ pygame.display.set_caption('First Game') #nome para janela
 xplayer = 1280/2 
 yplayer = 720/2
 
+#velocidade de moviemnto da cobra
+velocidade = 10
+
+#controles de x e y no teclado 
+xCont = velocidade
+yCont = 0
+
 pontos = 0 #var para os pontos
 relogio = pygame.time.Clock()#var para o fps
-listaPlayer = []
+listaPlayer = [] #lista que do player 
+tamInicial = 5 # tamanho predefinido do player, tamanho inicial
 
 #função para aumentar o tamanho da cobra enquanto ela come a maçã
 def tamanhoPlayer(listaPlayer):
@@ -41,7 +49,7 @@ def tamanhoPlayer(listaPlayer):
 
 #loop da janela
 while True:
-    relogio.tick(20) #fps do jogo
+    relogio.tick(30) #fps do jogo
     window.fill((255,255,255)) #limpeza da tela
     mensagem = f'Pontos: {pontos}' #mensagem que será escrita no canto da tela
     juntandoTexto = fonte.render(mensagem, False, (0,0,0))
@@ -51,30 +59,58 @@ while True:
             # coondição para quando o player clicar no x da janela e fechar 100% o jogo
             pygame.quit() 
             exit()
-            
-    '''if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                x -= 20 
-            elif event.key == pygame.K_s:  
-                y += 20
-            elif event.key == pygame.K_d:
-                x += 20
-            elif event.key == pygame.K_w:
-                y -=20
-            '''
     
+        # para que a cobra cobtinue com o seu tamanho ao parar de pressionar a tecla de movimento        
+        if event.type == pygame.KEYDOWN:
+                if event.key == K_a:
+                    # se eu apertar para ir para a esquerda e a minha var esta com valor positivo (para direita), ela vai bloquear o botao
+                    if xCont == velocidade:
+                        pass
+                    else:
+                        xCont = -velocidade
+                        #necessário zerar o x ou o y para que ela nao se movimente na diagonal 
+                        yCont = 0
+                elif event.key == K_s:  
+                    if yCont == -velocidade:
+                        pass
+                    else:
+                        yCont = velocidade
+                        xCont = 0
+                elif event.key == K_d:
+                    if xCont == -velocidade:
+                        pass
+                    else:
+                        xCont = velocidade
+                        yCont = 0
+                elif event.key == K_w:
+                    if yCont == velocidade:
+                        pass
+                    else:
+                        yCont =- velocidade
+                        xCont = 0
+    
+    xplayer += xCont
+    yplayer += yCont    
+
+
     #codigo para o computador ver se tem alguma tecla pressionada e realizar determinada ação
-    teclas = pygame.key.get_pressed() 
+    '''teclas = pygame.key.get_pressed() 
 
     if teclas[pygame.K_a]:
-        xplayer -= 20
+        xCont -=velocidade
+        yCont = 0
     elif teclas[pygame.K_s]:
-        yplayer += 20
+        yCont = velocidade
+        xCont = 0
     elif teclas[pygame.K_d]:
-        xplayer += 20
+        xCont = velocidade
+        yCont = 0
     elif teclas[pygame.K_w]:
-        yplayer -=20
-        
+        yCont = velocidade
+        xCont = 0
+    '''
+    
+    
     #retangulo do player (azul)    
     player = pygame.draw.rect(window, (0,255,0), (xplayer, yplayer, 20, 20))
     
@@ -90,12 +126,18 @@ while True:
         #incremento dos pontos
         pontos += 1
         colatagem.play()
+        tamInicial += 1
     
     #listas para armazenar valores 
     #lista da cabeça, armazenando valores x e y, ja que a cobra coleta as maçãs com a cabeça
     listaCabeca = []
     listaCabeca.append(xplayer)
     listaCabeca.append(yplayer)
+    
+    #se o tamanho do player for maior que o tamanho definido inicial
+    if len(listaPlayer) > tamInicial:
+        #deletará a coleta mais antiga 
+        del listaPlayer[0]
     
     #lista do player pegando os valores armazenados na cabeça de cada maçã que ela coletou
     listaPlayer.append(listaCabeca)
