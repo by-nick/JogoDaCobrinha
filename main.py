@@ -1,12 +1,13 @@
 import pygame
+from pygame import K_a, K_s, K_d, K_w
 
 pygame.init() # inicia todas as var e eventos do pygame
 
 window = pygame.display.set_mode((1280,720)) #janela do pygame
 pygame.display.set_caption('First Game') #nome para janela
 
-x = 720/2
-y = 0
+x = 1280/2
+y = 720/2
 
 relogio = pygame.time.Clock()
 
@@ -16,12 +17,28 @@ while True: #loop da janela
     for event in pygame.event.get(): #loop dos comandos e eventos
         if event.type == pygame.QUIT:
             pygame.quit() # coondição para quando o player clicar no x da janela e fechar 100% o jogo
-            
+            exit()
+    '''if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_a:
+                x -= 20 
+            elif event.key == pygame.K_s:
+                y += 20
+            elif event.key == pygame.K_d:
+                x += 20
+            elif event.key == pygame.K_w:
+                y -=20
+            '''
+    teclas = pygame.key.get_pressed()
 
+    if teclas[pygame.K_a]:
+        x -= 20
+    elif teclas[pygame.K_s]:
+        y += 20
+    elif teclas[pygame.K_d]:
+        x += 20
+    elif teclas[pygame.K_w]:
+        y -=20
+    pygame.draw.rect(window, (0,0,255), (x, y, 40, 50))
+        
 
-        pygame.draw.rect(window, (0,0,255), (x, y, 40, 50))
-        if y >= 1280:
-            y = 0
-        y += 5
-
-        pygame.display.update() #a cada atualização do loop principal, ela atualiza a tela do jogo
+    pygame.display.update() #a cada atualização do loop principal, ela atualiza a tela do jogo
