@@ -4,6 +4,16 @@ from random import randint
 
 pygame.init() # inicia todas as var e eventos do pygame
 
+#método para abaixar o som da musica, valores entre 0 e 1
+pygame.mixer.music.set_volume(0.4)
+#var para carregar musica
+musicaFundo = pygame.mixer.music.load('musicas/BoxCat Games - CPU Talk.mp3')
+#da play na musica e toca repetidas vezes por conta do -1
+pygame.mixer.music.play(-1)
+
+#som para a coleta de pontos
+colatagem = pygame.mixer.Sound('musicas/smw_coin.wav')
+
 # valores pre determinados da var do inimigo para que ele respawne em lugar alaetorio no mapa
 xInimigo = randint(40,600)  
 yInimigo = randint(50,430)
@@ -71,7 +81,7 @@ while True:
         
         #incremento dos pontos
         pontos += 1
-        
+        colatagem.play()
 
     window.blit(juntandoTexto, (450,40))
     pygame.display.update() #a cada atualização do loop principal, ela atualiza a tela do jogo
