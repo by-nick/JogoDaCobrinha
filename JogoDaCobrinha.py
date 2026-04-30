@@ -1,25 +1,35 @@
 import pygame
 from pygame import K_a, K_s, K_d, K_w, K_r
 from random import randint
+import sys 
+import os
+
+def caminho(relativo):
+    try: 
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+        
+    return os.path.join(base_path, relativo)
 
 pygame.init() # inicia todas as var e eventos do pygame
 
 #método para abaixar o som da musica, valores entre 0 e 1
 pygame.mixer.music.set_volume(0.4)
 #var para carregar musica
-musicaFundo = pygame.mixer.music.load('musicas/BoxCat Games - CPU Talk.mp3')
+musicaFundo = pygame.mixer.music.load(caminho('musicas/BoxCat Games - CPU Talk.mp3'))
 #da play na musica e toca repetidas vezes por conta do -1
 pygame.mixer.music.play(-1)
 
 #som para a coleta de pontos
-colatagem = pygame.mixer.Sound('musicas/smw_coin.wav')
+colatagem = pygame.mixer.Sound(caminho('musicas/smw_coin.wav'))
 
 # valores pre determinados da var do inimigo para que ele respawne em lugar alaetorio no mapa
 xmaca = randint(40,600)  
 ymaca = randint(50,430)
 
 #var para importar fonte usando biblioteca do pygame 
-fonte = pygame.font.SysFont('Arial', 40, True, True)
+fonte = pygame.font.SysFont(caminho('Arial', 40, True, True))
 
 window = pygame.display.set_mode((1280,720)) #janela do pygame
 pygame.display.set_caption('First Game') #nome para janela
@@ -164,7 +174,7 @@ while True:
     #se a lista cabeça tiver o mesmo valor que lista player
     if listaPlayer.count(listaCabeca) > 1:
         #adicionando mensagem para reiniciar
-        fonte2 = pygame.font.SysFont('arial', 20, True, False)
+        fonte2 = pygame.font.SysFont(caminho('arial', 20, True, False))
         mensagem = 'Você perdeu! Pressione R para jogar novamente'
         juntandoTexto = fonte2.render(mensagem, True, (255, 0, 0))
         
