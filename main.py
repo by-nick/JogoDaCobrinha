@@ -1,5 +1,5 @@
 import pygame
-from pygame import K_a, K_s, K_d, K_w
+from pygame import K_a, K_s, K_d, K_w, K_r
 from random import randint
 
 pygame.init() # inicia todas as var e eventos do pygame
@@ -39,6 +39,7 @@ pontos = 0 #var para os pontos
 relogio = pygame.time.Clock()#var para o fps
 listaPlayer = [] #lista que do player 
 tamInicial = 5 # tamanho predefinido do player, tamanho inicial
+morreu = False
 
 #função para aumentar o tamanho da cobra enquanto ela come a maçã
 def tamanhoPlayer(listaPlayer):
@@ -46,6 +47,24 @@ def tamanhoPlayer(listaPlayer):
     for XeY in listaPlayer:
         #ele desenha uma um bloco verde atras da cobra
         pygame.draw.rect(window, (0,255,0), (XeY[0], XeY[1], 20,20) )
+ 
+ 
+#função para reiniciar jogo apos morrer       
+def reiniciar():
+    #tornando as var globais dentro da função
+    global pontos, tamInicial, xplayer, yplayer, listaPlayer, listaCabeca, xmaca, ymaca, morreu
+   
+    #redefinindo os valores iniciais das var apos morrer
+    pontos = 0
+    tamInicial = 5
+    xplayer = 1280/2 
+    yplayer = 720/2
+    listaPlayer = []
+    listaCabeca = []
+    xmaca = randint(40,600)  
+    ymaca = randint(50,430)
+    morreu = False
+
 
 #loop da janela
 while True:
@@ -141,6 +160,46 @@ while True:
     
     #lista do player pegando os valores armazenados na cabeça de cada maçã que ela coletou
     listaPlayer.append(listaCabeca)
+    
+    #se a lista cabeça tiver o mesmo valor que lista player
+    if listaPlayer.count(listaCabeca) > 1:
+        #adicionando mensagem para reiniciar
+        fonte2 = pygame.font.SysFont('arial', 20, True, False)
+        mensagem = 'Você perdeu! Pressione R para jogar novamente'
+        juntandoTexto = fonte2.render(mensagem, True, (255, 0, 0))
+        
+        #pega o centro do retangulo que fica ao redor da mensagem, ou seja, a tela branca
+        retTexto = juntandoTexto.get_rect()
+        #a var morreu passa a ser veidadeiro
+        morreu = True
+        #enquanto morreu for verdadeiro
+        while morreu:
+            #ao morrer a tela ficar 100% branca
+            window.fill((255,255,255))
+            #inicializará o evento do botão de reiniciair
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == K_r:
+                        reiniciar()
+                        
+            #e adiciona no meio da tela utilizando sua largura e altura origial descrito no código           
+            retTexto.center = (1280//2, 720//2)            
+            #exibe a mensagem na tela branca de game over
+            window.blit(juntandoTexto, retTexto)            
+            #atualiza a tela para que fique branca            
+            pygame.display.update()
+            
+    if xplayer > 1280:
+        xplayer = 0
+    elif xplayer < 0:
+        xplayer = 1280
+    elif yplayer < 0:
+        yplayer = 720
+    elif yplayer > 720:
+        yplayer = 0
     
     #chamando a função e anexando o parametro da lista da cobra
     tamanhoPlayer(listaPlayer)
