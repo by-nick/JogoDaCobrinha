@@ -29,7 +29,7 @@ xmaca = randint(40,600)
 ymaca = randint(50,430)
 
 #var para importar fonte usando biblioteca do pygame 
-fonte = pygame.font.SysFont(caminho('Arial', 40, True, True))
+fonte = pygame.font.SysFont('Arial', 40, True, True)
 
 window = pygame.display.set_mode((1280,720)) #janela do pygame
 pygame.display.set_caption('First Game') #nome para janela
@@ -174,7 +174,7 @@ while True:
     #se a lista cabeça tiver o mesmo valor que lista player
     if listaPlayer.count(listaCabeca) > 1:
         #adicionando mensagem para reiniciar
-        fonte2 = pygame.font.SysFont(caminho('arial', 20, True, False))
+        fonte2 = pygame.font.SysFont('arial', 20, True, False)
         mensagem = 'Você perdeu! Pressione R para jogar novamente'
         juntandoTexto = fonte2.render(mensagem, True, (255, 0, 0))
         
